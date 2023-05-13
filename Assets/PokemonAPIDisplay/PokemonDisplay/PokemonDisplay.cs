@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 using Newtonsoft.Json;
 using TMPro;
 
@@ -12,6 +13,7 @@ namespace PokemonDisplay
 	{
 		public List<string> pokemons = new List<string>();
 		public int pokemonIndex;
+		public string nextPokemonDisplaySceneName;
 
 		[SerializeField]
 		private RawImage _rawImage;
@@ -33,6 +35,9 @@ namespace PokemonDisplay
 
 		[SerializeField]
 		private Button _nextButton;
+
+		[SerializeField]
+		private Button _nextPokemonDisplaySceneButton;
 
 		private IEnumerator GetPokemonRoutine(string name)
 		{
@@ -87,6 +92,11 @@ namespace PokemonDisplay
 			if(++pokemonIndex >= pokemons.Count) { pokemonIndex = 0; }
 			StartCoroutine(GetPokemonRoutine(pokemons[pokemonIndex]));
 		}
+		
+		private void OnNextPokemonDisplaySceneButtonClicked()
+		{
+			SceneManager.LoadScene(nextPokemonDisplaySceneName);
+		}
 
 		private void Start()
 		{
@@ -97,12 +107,14 @@ namespace PokemonDisplay
 		{
 			_prevButton.onClick.AddListener(OnPrevButtonClicked);
 			_nextButton.onClick.AddListener(OnNextButtonClicked);
+			_nextPokemonDisplaySceneButton.onClick.AddListener(OnNextPokemonDisplaySceneButtonClicked);
 		}
 
 		private void OnDisable()
 		{
 			_prevButton.onClick.RemoveListener(OnPrevButtonClicked);
 			_nextButton.onClick.RemoveListener(OnNextButtonClicked);
+			_nextPokemonDisplaySceneButton.onClick.RemoveListener(OnNextPokemonDisplaySceneButtonClicked);
 		}
 	}
 }
